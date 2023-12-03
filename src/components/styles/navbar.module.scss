@@ -1,0 +1,27 @@
+.navbar_container {
+  height: 90px;
+  position: fixed;
+  z-index: 10px;
+  padding: 1rem 0;
+  width: 100%;
+
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  h3 {
+    font-size: 22px;
+    color: #2042b8;
+    font-weight: 700;
+
+    span {
+      color: #4d9bff;
+    }
+  }
+
+  .connect_button {
+    background-color: #2042b8;
+    color: #fff;
+  }
+}
