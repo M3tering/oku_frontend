@@ -16,7 +16,11 @@ In a nutshell, M3tering is a token incentivized protocol with the objective of d
 
  - **Network Effects and Growth:** The M3tering Protocol's tokenomics work in a way that more providers and consumers join the network, the higher the demand for DePIN tokens becomes. This, in turn, attracts more participants to the protocol, creating a feedback loop that drives further expansion.
 
-## Features
+## Available Features
 - Payment of solar energy with crypto (DIA)
 
+## Upcoming Features
+- Fiat Payment for Nigerians
+- Protocol Contract to validate and collect fees
+- Mobile Application for Users for easy Accessibility
 

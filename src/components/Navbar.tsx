@@ -18,7 +18,7 @@ const Navbar = () => {
       <div className="container">
         <div className={styles.navbar}>
           <h3>
-            Keza<span>ya</span>
+            O<span>ku</span>
           </h3>
 
           <div>

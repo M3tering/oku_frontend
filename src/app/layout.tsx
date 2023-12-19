@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Kezaya | Powered by Metering Protocol",
+  title: "Oku| Powered by Metering Protocol",
   description: "Safe and Fast Energy Meter Subscription",
 };
 
