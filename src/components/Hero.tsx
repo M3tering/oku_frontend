@@ -5,10 +5,12 @@ import { toast } from "react-toastify";
 import styles from "./styles/hero.module.scss";
 import Link from "next/link";
 import { approve, getAllowance } from "@/utils/tokens";
-import { DIA_ADDRESS, METERING_ADDRESS } from "@/utils/constants";
-import { Kezayapay } from "@/utils/Kezayapay";
+import { DIA_ADDRESS, PROTOCOL_METERING_ADDRESS } from "@/utils/constants";
+import { Okupay, validateMeterID } from "@/utils/Okupay";
 import { getBalance } from "@/utils/tokens";
-import { useAddress } from "@thirdweb-dev/react";
+import { useAddress, useConnectionStatus } from "@thirdweb-dev/react";
+import animalHash from "angry-purple-tiger";
+import BigNumber from "bignumber.js";
 
 export function hasEthereum() {
   return window.ethereum ? true : false;
@@ -16,22 +18,30 @@ export function hasEthereum() {
 const Hero = () => {
   const [allowance, setAllowance] = useState("0");
   const [balance, setBalance] = useState("");
-  const address = useAddress();
-  const [state, setState] = useState<any>({
-    meterId: 0,
-    isLoading: false,
-    tokeAmount: 0,
+  const [displayName, setDisplayName] = useState<any>({
+    nameofMeter: "",
+    isMeterAvaliable: false,
   });
+  const address = useAddress();
+  const connectionStatus = useConnectionStatus();
+
+  const [state, setState] = useState<any>({
+    meterId: null,
+    isLoading: false,
+    tokeAmount: null,
+  });
+
   useEffect(() => {
     _checkAllowance();
     _checkBalance();
   }, [address, DIA_ADDRESS]);
+
   async function _checkAllowance() {
     if (address) {
       const _allowance = await getAllowance(
         DIA_ADDRESS,
         address,
-        METERING_ADDRESS
+        PROTOCOL_METERING_ADDRESS
       );
       setAllowance(_allowance.toFixed());
     } else {
@@ -54,7 +64,7 @@ const Hero = () => {
       setState({ ...state, isLoading: true });
       const trx = await approve(
         DIA_ADDRESS,
-        METERING_ADDRESS,
+        PROTOCOL_METERING_ADDRESS,
         ethers.constants.MaxUint256,
         signer
       );
@@ -73,7 +83,7 @@ const Hero = () => {
     const signer = provider.getSigner();
     try {
       setState({ ...state, isLoading: true });
-      const trx = await Kezayapay(
+      const trx = await Okupay(
         signer,
         ethers.utils.parseEther(state.tokeAmount),
         state.meterId
@@ -89,6 +99,42 @@ const Hero = () => {
     }
   };
 
+  const handleMeterChange = async () => {
+    if (!hasEthereum()) return false;
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    if (state.meterId) {
+      try {
+        const trx = await validateMeterID(signer, state.meterId);
+        console.log("TR", trx.toString());
+        if (trx.toString() === "0") {
+          setDisplayName({
+            nameofMeter: "invalid meterid",
+            isMeterAvaliable: false,
+          });
+        } else {
+          const digest = trx.toString();
+          const hashedName = animalHash(digest, {
+            style: "uppercase",
+          });
+          setDisplayName({
+            nameofMeter: hashedName,
+            isMeterAvaliable: true,
+          });
+        }
+      } catch (e: any) {
+        console.log("Message", e.message);
+      }
+    } else {
+      setDisplayName({
+        nameofMeter: "",
+        isMeterAvaliable: false,
+      });
+    }
+  };
+  useEffect(() => {
+    handleMeterChange();
+  }, [state.meterId]);
   const handleSubmit = (e: any) => {
     e.preventDefault();
     if (parseFloat(allowance) < parseFloat(state.tokeAmount)) {
@@ -112,6 +158,9 @@ const Hero = () => {
     if (state.isLoading) {
       return true;
     }
+    if (!displayName.isMeterAvaliable) {
+      return true;
+    }
     return false;
   }
   function buttonDisplay() {
@@ -123,6 +172,9 @@ const Hero = () => {
     }
     if (parseFloat(allowance) > parseFloat(state.tokeAmount)) {
       return "Pay";
+    }
+    if (!displayName.isMeterAvaliable) {
+      return "Check MeterId";
     }
     return "Approve Dia";
   }
@@ -139,17 +191,26 @@ const Hero = () => {
                 placeholder="2"
                 type="number"
                 value={state.meterId}
+                disabled={connectionStatus !== "connected"}
                 onChange={(e) =>
                   setState({ ...state, meterId: e.target.value })
                 }
                 min={1}
               />
+              {displayName.nameofMeter === "invalid meterid" && (
+                <p>{displayName.nameofMeter} </p>
+              )}
+              {displayName.isMeterAvaliable && (
+                <p>Meter Name: {displayName.nameofMeter} </p>
+              )}
             </div>
             <div className={styles.form_inputs}>
-              <label>Enter Amount to Pay</label>
+              <label>Enter Amount to Pay($)</label>
+
               <input
                 placeholder="10"
                 type="number"
+                disabled={connectionStatus !== "connected"}
                 min={1}
                 value={state.tokeAmount}
                 onChange={(e) =>
