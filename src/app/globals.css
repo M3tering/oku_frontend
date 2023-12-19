@@ -16,18 +16,25 @@ body {
   margin: 0;
   height: 100vh;
   font-family: "Raleway", sans-serif;
-  background: #fafafa;
+  /* background: #fafafa; */
+  /* background-image: url('../../public/oku.jpg');
+  background-repeat: no-repeat;
+  background-position: center center; */
+  background: rgb(12, 50, 236);
+  background: radial-gradient(
+    circle,
+    rgba(12, 50, 236, 1) 0%,
+    rgba(30, 38, 49, 1) 98%
+  );
 
-  /* font-family: 'Alata', sans-serif; */
   overflow-x: hidden;
-  /* background: transparent; */
 }
 
 .Toastify__toast-container {
   z-index: 999999999; /* Set it to the value you need */
 }
 .gaga_online {
-  background: white;
+  /* background: white; */
 }
 a {
   color: inherit;

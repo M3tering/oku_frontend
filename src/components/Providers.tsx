@@ -31,7 +31,7 @@ const Providers: React.FC<ProvidersProps> = ({ children }) => {
         }),
         safeWallet(),
       ]}
-      supportedChains={[IotexNetworkTestnet, Goerli]}
+      supportedChains={[IotexNetworkTestnet]}
     >
       <ToastContainer />
       {children}
