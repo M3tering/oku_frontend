@@ -22,4 +22,5 @@ In a nutshell, M3tering is a token incentivized protocol with the objective of d
 ## Upcoming Features
 - Fiat Payment for Nigerians
 - Protocol Contract to validate and collect fees
+- Mobile Application for Users for easy Accessibility
 
