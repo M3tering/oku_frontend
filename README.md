@@ -1,6 +1,6 @@
 # Oku
 
-### Oku is a Payment Interface/ Medium that interacts with the Metering Protocol which enables users to pay and renew their power utility with Dia Tokens on the Blockchain 
+### Oku is a Payment Infastructure that engages with the M#tering Protocol, allowing users to make payments and renew their power utility using Fiat and Crypto Currency.
 
 
 ## Overview of Metering Protocol
